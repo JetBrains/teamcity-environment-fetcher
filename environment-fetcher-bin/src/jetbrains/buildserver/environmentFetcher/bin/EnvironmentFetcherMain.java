@@ -1,7 +1,8 @@
 package jetbrains.buildserver.environmentFetcher.bin;
 
+import java.util.LinkedHashMap;
 import java.util.Map;
-import jetbrains.buildServer.messages.serviceMessages.MapSerializerUtil;
+import jetbrains.buildServer.messages.serviceMessages.ServiceMessage;
 
 /**
  * @author Roman.Chernyatchik
@@ -13,10 +14,11 @@ public class EnvironmentFetcherMain {
 
     // pass using service messages:
     for (Map.Entry<String, String> entry : env.entrySet()) {
-      final String key = MapSerializerUtil.escapeStr(entry.getKey(), MapSerializerUtil.STD_ESCAPER);
-      final String value = MapSerializerUtil.escapeStr(entry.getValue(), MapSerializerUtil.STD_ESCAPER);
-
-      System.out.println("##teamcity[buildEnvironment name='" + key + "' value='" + value + "']");
+      final Map<String, String> params = new LinkedHashMap<String, String>();
+      params.put("name", entry.getKey());
+      params.put("value", entry.getValue());
+      System.out.println(ServiceMessage.asString("buildEnvironment", params));
     }
+    System.out.flush();
   }
 }
