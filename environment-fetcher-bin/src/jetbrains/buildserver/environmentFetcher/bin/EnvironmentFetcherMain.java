@@ -13,10 +13,6 @@ public class EnvironmentFetcherMain {
     // get env, ordered by name:
     final Map<String,String> env = new TreeMap<String,String>(System.getenv());
 
-    // remove flow id related variables
-    env.remove("TEAMCITY_PROCESS_FLOW_ID");
-    env.remove("TEAMCITY_PROCESS_PARENT_FLOW_ID");
-
     // pass using service messages:
     for (Map.Entry<String, String> entry : env.entrySet()) {
       final Map<String, String> params = new LinkedHashMap<String, String>();
