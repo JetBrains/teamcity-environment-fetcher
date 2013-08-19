@@ -2,6 +2,7 @@ package jetbrains.buildserver.environmentFetcher.bin;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.TreeMap;
 import jetbrains.buildServer.messages.serviceMessages.ServiceMessage;
 
 /**
@@ -9,8 +10,12 @@ import jetbrains.buildServer.messages.serviceMessages.ServiceMessage;
  */
 public class EnvironmentFetcherMain {
   public static void main(String[] args) {
-    // get env:
-    final Map<String,String> env = System.getenv();
+    // get env, ordered by name:
+    final Map<String,String> env = new TreeMap<String,String>(System.getenv());
+
+    // remove flow id related variables
+    env.remove("TEAMCITY_PROCESS_FLOW_ID");
+    env.remove("TEAMCITY_PROCESS_PARENT_FLOW_ID");
 
     // pass using service messages:
     for (Map.Entry<String, String> entry : env.entrySet()) {

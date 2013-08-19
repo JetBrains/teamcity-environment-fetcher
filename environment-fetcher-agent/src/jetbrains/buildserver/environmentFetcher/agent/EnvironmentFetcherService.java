@@ -42,8 +42,9 @@ public class EnvironmentFetcherService {
       final String pluginLibDir = PathUtil.getParentPath(thisJarPath);
       final String pluginHomeDir = PathUtil.getParentPath(pluginLibDir);
 
-      final StringBuilder pluginBinDir = buf.append(pluginHomeDir).append(File.separatorChar).append("bin");
-      pluginBinDir.append(File.separatorChar).append("env-fetcher.jar");
+      buf.append(pluginHomeDir).append(File.separatorChar)
+        .append("bin").append(File.separatorChar)
+        .append("env-fetcher.jar");
 
       return buf.toString();
     }
