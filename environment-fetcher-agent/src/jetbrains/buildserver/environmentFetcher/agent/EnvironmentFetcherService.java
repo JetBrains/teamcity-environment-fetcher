@@ -31,8 +31,10 @@ public class EnvironmentFetcherService {
       final StringBuilder buf = new StringBuilder();
 
       // java executable path
+      buf.append("\"");
       buf.append(System.getProperty("java.home")).append(File.separator);
       buf.append("bin").append(File.separator).append(SystemInfo.isWindows ? "java.exe" : "java");
+      buf.append("\"");
 
       // -jar option
       buf.append(" -jar ");
@@ -42,9 +44,11 @@ public class EnvironmentFetcherService {
       final String pluginLibDir = PathUtil.getParentPath(thisJarPath);
       final String pluginHomeDir = PathUtil.getParentPath(pluginLibDir);
 
+      buf.append("\"");
       buf.append(pluginHomeDir).append(File.separatorChar)
         .append("bin").append(File.separatorChar)
         .append("env-fetcher.jar");
+      buf.append("\"");
 
       return buf.toString();
     }
