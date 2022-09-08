@@ -3,10 +3,11 @@ package jetbrains.buildserver.environmentFetcher.agent;
 import com.intellij.openapi.util.SystemInfo;
 import com.intellij.util.PathUtil;
 import java.io.File;
-import jetbrains.buildServer.agent.AgentLifeCycleAdapter;
-import jetbrains.buildServer.agent.AgentLifeCycleListener;
-import jetbrains.buildServer.agent.BuildAgent;
-import jetbrains.buildServer.util.EventDispatcher;
+import java.util.Collections;
+import java.util.Map;
+import jetbrains.buildServer.ExtensionHolder;
+import jetbrains.buildServer.agent.config.AgentParametersSupplier;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * @author Roman.Chernyatchik
@@ -14,17 +15,17 @@ import jetbrains.buildServer.util.EventDispatcher;
 public class EnvironmentFetcherService {
   public static final String TEAMCITY_CAPTURE_ENV_NAME = "TEAMCITY_CAPTURE_ENV";
 
-  public EnvironmentFetcherService(final EventDispatcher<AgentLifeCycleListener> dispatcher) {
-    dispatcher.addListener(new MyAgentLifeCycleListener());
+  public EnvironmentFetcherService(@NotNull final ExtensionHolder extensionHolder) {
+    extensionHolder.registerExtension(AgentParametersSupplier.class, getClass().getName(), new MyAgentConfigurationSnapshot());
   }
 
   /**
    * @author Roman.Chernyatchik
    */
-  public static class MyAgentLifeCycleListener extends AgentLifeCycleAdapter {
+  public static class MyAgentConfigurationSnapshot implements AgentParametersSupplier {
     @Override
-    public void beforeAgentConfigurationLoaded(@org.jetbrains.annotations.NotNull final BuildAgent agent) {
-      agent.getConfiguration().addEnvironmentVariable(TEAMCITY_CAPTURE_ENV_NAME, generateCmdLine());
+    public Map<String, String> getEnvironmentVariables() {
+      return Collections.singletonMap(TEAMCITY_CAPTURE_ENV_NAME, generateCmdLine());
     }
 
     public String generateCmdLine() {
