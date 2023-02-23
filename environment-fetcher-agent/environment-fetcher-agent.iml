@@ -19,5 +19,6 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module" module-name="common" />
     <orderEntry type="module" module-name="agent-openapi" />
+    <orderEntry type="module" module-name="migration" />
   </component>
 </module>
